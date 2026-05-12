@@ -1,0 +1,16 @@
+entity,entity_type,priority,related_topic
+Harbour Incorporation,brand,high,company incorporation services in Singapore
+Singapore,market,high,company incorporation services in Singapore
+ACRA,government_agency,high,Singapore company registration requirements
+Accounting and Corporate Regulatory Authority,government_agency,medium,Singapore company registration requirements
+private limited company,business_structure,high,Singapore company registration requirements
+local resident director,role,high,nominee director service in Singapore
+nominee director,service_entity,high,nominee director service in Singapore
+corporate secretary,role,high,corporate secretary service in Singapore
+registered office address,requirement,medium,Singapore company registration requirements
+foreign shareholder,entity_type,medium,foreign founder incorporation requirements
+company constitution,document,medium,Singapore company registration requirements
+KYC documents,document,medium,Singapore company registration requirements
+business bank account,post_incorporation_step,medium,post-incorporation compliance in Singapore
+annual return,compliance_requirement,low,post-incorporation compliance in Singapore
+IRAS,tax_authority,low,post-incorporation compliance in Singapore

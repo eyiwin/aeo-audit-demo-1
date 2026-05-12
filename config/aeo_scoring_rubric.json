@@ -1,0 +1,179 @@
+{
+  "rubric_name": "AEO Retrieval Readiness Scoring Rubric",
+  "version": "0.1",
+  "total_points": 100,
+  "scoring_note": "This rubric evaluates whether content is structured for AI retrieval, understanding, summarization, and citation-readiness. It is not a traditional SEO ranking rubric and does not guarantee AI citation.",
+  "dimensions": [
+    {
+      "id": "query_answer_coverage",
+      "name": "Query-answer coverage",
+      "weight": 20,
+      "description": "Measures whether the page directly addresses the target questions and commercially relevant query variants.",
+      "what_good_looks_like": "The page includes clear, complete answers to the target questions using language close to how the audience asks them.",
+      "what_bad_looks_like": "The page talks around the topic but does not directly answer the target questions or leaves important query intents uncovered.",
+      "scoring_guidance": "Score higher when target question terms, intents, and answer passages are clearly present. Score lower when answers are missing, vague, or spread across unrelated sections.",
+      "evidence_to_collect": [
+        "Matched target questions",
+        "Missing target questions",
+        "Question terms found in page text",
+        "Question terms missing from page text",
+        "Relevant answer passages"
+      ],
+      "recommended_fix_logic": "For each missing or weakly covered question, add a concise answer block that mirrors the user's wording and then expands with useful detail."
+    },
+    {
+      "id": "direct_answer_extractability",
+      "name": "Direct answer extractability",
+      "weight": 15,
+      "description": "Measures whether AI systems can extract a clear answer passage without inferring from scattered copy.",
+      "what_good_looks_like": "Key sections start with a direct, declarative answer before supporting explanation, examples, or nuance.",
+      "what_bad_looks_like": "Answers are buried, implied, overly promotional, or dependent on long context to understand.",
+      "scoring_guidance": "Score higher when the page uses BLUF-style answers, short answer paragraphs, and declarative statements. Score lower when answer candidates are long, vague, or fragmented.",
+      "evidence_to_collect": [
+        "Opening paragraph clarity",
+        "Short answer blocks",
+        "Declarative answer sentences",
+        "BLUF-style section openings",
+        "Long or ambiguous passages"
+      ],
+      "recommended_fix_logic": "Rewrite important sections so the first one or two sentences answer the question directly before adding context."
+    },
+    {
+      "id": "heading_content_structure",
+      "name": "Heading and content structure",
+      "weight": 10,
+      "description": "Measures whether the page is organized into readable, retrievable content blocks with useful headings.",
+      "what_good_looks_like": "The page uses descriptive H1/H2/H3 headings, short sections, logical order, and content blocks that can stand alone.",
+      "what_bad_looks_like": "The page has weak headings, long undifferentiated copy, unclear section flow, or content that is difficult to chunk.",
+      "scoring_guidance": "Score higher when headings describe answers and content is block-structured for retrieval. Score lower when headings are generic or the page is hard to parse.",
+      "evidence_to_collect": [
+        "H1 text",
+        "H2 and H3 headings",
+        "Paragraph count",
+        "Average paragraph length",
+        "Section clarity"
+      ],
+      "recommended_fix_logic": "Add descriptive headings and break long sections into focused answer blocks with one clear idea per section."
+    },
+    {
+      "id": "faq_readiness",
+      "name": "FAQ readiness",
+      "weight": 10,
+      "description": "Measures whether the page includes question-and-answer structures that map to natural AI retrieval patterns.",
+      "what_good_looks_like": "The page includes relevant FAQs or question-style headings with concise, direct answers.",
+      "what_bad_looks_like": "The page has no FAQ structure, misses obvious long-tail questions, or provides answers that are too vague to retrieve.",
+      "scoring_guidance": "Score higher when high-priority questions appear as headings or FAQs with direct answers. Score lower when question formats are absent or incomplete.",
+      "evidence_to_collect": [
+        "FAQ section presence",
+        "Question-style headings",
+        "Target questions answered in FAQ format",
+        "FAQ answer length",
+        "Missing FAQ opportunities"
+      ],
+      "recommended_fix_logic": "Add an FAQ section that answers priority questions in plain language, using each question as a heading."
+    },
+    {
+      "id": "entity_clarity",
+      "name": "Entity clarity",
+      "weight": 10,
+      "description": "Measures whether key entities are explicitly named and easy for AI systems to identify.",
+      "what_good_looks_like": "The page clearly identifies the brand, offer, audience, market, topic, people, places, and other required entities.",
+      "what_bad_looks_like": "Important entities are missing, inconsistently named, or only implied through vague wording.",
+      "scoring_guidance": "Score higher when required entities appear naturally in titles, headings, body copy, and metadata. Score lower when entity mentions are sparse or ambiguous.",
+      "evidence_to_collect": [
+        "Required entities found",
+        "Required entities missing",
+        "Brand mentions",
+        "Topic mentions",
+        "Audience and market mentions"
+      ],
+      "recommended_fix_logic": "Add missing required entities in natural language across headings, introductory copy, and relevant answer passages."
+    },
+    {
+      "id": "semantic_relationship_clarity",
+      "name": "Semantic relationship clarity",
+      "weight": 10,
+      "description": "Measures whether the page explains how entities, topics, benefits, proof points, and actions relate to one another.",
+      "what_good_looks_like": "The content clearly connects who the brand helps, what it offers, why it matters, how it works, and what outcomes it supports.",
+      "what_bad_looks_like": "The page lists concepts without explaining relationships, causality, use cases, comparisons, or outcomes.",
+      "scoring_guidance": "Score higher when the page uses relationship language such as helps, includes, because, for example, compared with, supports, and results in. Score lower when relationships are implicit.",
+      "evidence_to_collect": [
+        "Relationship phrases",
+        "Use cases",
+        "Benefit explanations",
+        "Comparison language",
+        "Cause-and-effect statements"
+      ],
+      "recommended_fix_logic": "Add sentences that explicitly connect entities and concepts, such as who uses the offer, what problem it solves, and why it matters."
+    },
+    {
+      "id": "evidence_source_support",
+      "name": "Evidence and source support",
+      "weight": 10,
+      "description": "Measures whether claims are grounded with proof points that improve citation-readiness.",
+      "what_good_looks_like": "The page supports claims with examples, data, case studies, testimonials, source links, methodology, or third-party validation.",
+      "what_bad_looks_like": "The page makes broad claims without evidence, examples, sources, or validation.",
+      "scoring_guidance": "Score higher when important claims have concrete support. Score lower when claims are promotional, unsupported, or impossible to verify from the page.",
+      "evidence_to_collect": [
+        "Source links",
+        "Examples",
+        "Statistics or data points",
+        "Case studies",
+        "Testimonials",
+        "Methodology explanations"
+      ],
+      "recommended_fix_logic": "Add proof for major claims using examples, source links, data points, third-party validation, or short case evidence."
+    },
+    {
+      "id": "schema_readiness",
+      "name": "Schema readiness",
+      "weight": 5,
+      "description": "Measures whether the page includes structured data signals that help machines understand page type and entities.",
+      "what_good_looks_like": "Relevant schema such as Organization, Article, FAQPage, Person, Service, or BreadcrumbList is present and aligned with visible content.",
+      "what_bad_looks_like": "Schema is missing, incomplete, inaccurate, or disconnected from the visible page content.",
+      "scoring_guidance": "Score higher when relevant schema types are present and consistent with the page. Score lower when schema is absent or mismatched.",
+      "evidence_to_collect": [
+        "Schema types detected",
+        "Missing relevant schema types",
+        "Visible content alignment",
+        "Organization schema presence",
+        "FAQPage or Article schema presence"
+      ],
+      "recommended_fix_logic": "Add or improve schema that reflects the visible page content and key entities."
+    },
+    {
+      "id": "brand_topic_association",
+      "name": "Brand-topic association",
+      "weight": 5,
+      "description": "Measures whether the page clearly associates the brand with the target topic and commercial category.",
+      "what_good_looks_like": "The brand is repeatedly and naturally connected to the target topic, offer, audience, and market.",
+      "what_bad_looks_like": "The brand and topic appear separately, rarely, or without a clear relationship.",
+      "scoring_guidance": "Score higher when brand-topic pairings appear in titles, headings, answer passages, metadata, and supporting copy. Score lower when the connection is weak or implied.",
+      "evidence_to_collect": [
+        "Brand mentions",
+        "Topic mentions",
+        "Brand-topic phrases",
+        "Offer mentions",
+        "Audience mentions"
+      ],
+      "recommended_fix_logic": "Add natural strategic repetition that ties the brand to the topic, offer, audience, and market."
+    },
+    {
+      "id": "conversion_alignment",
+      "name": "Conversion alignment",
+      "weight": 5,
+      "description": "Measures whether the page gives a clear next step that matches the user's likely intent after reading an AI-generated answer.",
+      "what_good_looks_like": "The page includes a relevant, low-friction next action such as booking, contacting, requesting an audit, downloading a resource, or reading a related page.",
+      "what_bad_looks_like": "The page answers questions but does not guide the reader toward a useful next step.",
+      "scoring_guidance": "Score higher when next actions are clear, relevant, and aligned with the content intent. Score lower when calls to action are missing, generic, or disconnected.",
+      "evidence_to_collect": [
+        "Calls to action",
+        "Contact or booking language",
+        "Next-step links",
+        "Offer alignment",
+        "Intent-to-action fit"
+      ],
+      "recommended_fix_logic": "Add a clear next action that fits the page intent and helps the reader move from answer consumption to action."
+    }
+  ]
+}

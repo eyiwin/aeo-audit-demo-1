@@ -1,0 +1,6 @@
+url,page_type,target_topic,priority
+inputs/sample_company_incorporation_page.html,service_page,company incorporation services in Singapore,high
+https://www.harbourincorporation.example/company-incorporation-singapore,service_page,company incorporation services in Singapore,high
+https://www.harbourincorporation.example/singapore-company-registration-guide,guide,Singapore company registration requirements,high
+https://www.harbourincorporation.example/nominee-director-service-singapore,service_page,nominee director service in Singapore,medium
+https://www.harbourincorporation.example/corporate-secretary-singapore,service_page,corporate secretary service in Singapore,medium

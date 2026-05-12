@@ -1,0 +1,29 @@
+{
+  "client_name": "Harbour & Co Advisory",
+  "brand_name": "Harbour Incorporation",
+  "website_url": "https://www.harbourincorporation.example",
+  "target_market": "Singapore",
+  "target_audience": "foreign founders, startup operators, and small business owners who want to register a company in Singapore",
+  "business_goal": "Increase qualified consultation requests from founders researching Singapore company incorporation requirements.",
+  "primary_conversion": "Book a company incorporation consultation",
+  "main_service": "Company incorporation services in Singapore",
+  "primary_topic": "company incorporation services in Singapore",
+  "secondary_topics": [
+    "Singapore company registration",
+    "private limited company setup",
+    "ACRA registration",
+    "nominee director service",
+    "corporate secretary service",
+    "registered office address",
+    "foreign founder incorporation requirements",
+    "Singapore business bank account setup"
+  ],
+  "competitors": [
+    "Osome Singapore",
+    "Sleek Singapore",
+    "3E Accounting",
+    "Corporate Services Singapore",
+    "Piloto Asia"
+  ],
+  "notes": "Fictional sample client for local MVP testing. The audit should evaluate whether incorporation content is structured for AI retrieval-readiness and citation-readiness, not generic SEO."
+}

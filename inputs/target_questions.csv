@@ -1,0 +1,11 @@
+question,intent_type,priority,expected_page_type,target_topic
+How do I incorporate a company in Singapore?,informational,high,guide,company incorporation services in Singapore
+What are the requirements to register a private limited company in Singapore?,informational,high,guide,Singapore company registration requirements
+Can a foreigner start a company in Singapore?,commercial,high,service_page,foreign founder incorporation requirements
+Do I need a local director to incorporate in Singapore?,commercial,high,service_page,nominee director service in Singapore
+What documents are needed for Singapore company incorporation?,informational,medium,guide,Singapore company registration requirements
+How long does Singapore company registration take?,commercial,medium,service_page,company incorporation services in Singapore
+What does a corporate secretary do after incorporation?,informational,medium,service_page,corporate secretary service in Singapore
+How much does company incorporation in Singapore cost?,commercial,medium,service_page,company incorporation services in Singapore
+What should I do after my Singapore company is incorporated?,transactional,medium,guide,post-incorporation compliance in Singapore
+Why choose Harbour Incorporation for Singapore company setup?,brand_comparison,medium,service_page,company incorporation services in Singapore
