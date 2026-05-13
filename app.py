@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import sys
+import traceback
 
 import pandas as pd
 import streamlit as st
@@ -109,6 +110,52 @@ def _download_button(label: str, path: Path, mime: str) -> None:
     st.download_button(label=label, data=path.read_bytes(), file_name=path.name, mime=mime)
 
 
+def _error_hint(error_message: str, resolved_target: str) -> str:
+    lowered = error_message.lower()
+    if resolved_target.startswith(("http://", "https://")):
+        if "failed to resolve" in lowered or "name resolution" in lowered:
+            return "The domain could not be resolved. Check that the URL is real and publicly reachable."
+        if "403" in lowered or "forbidden" in lowered:
+            return "The website likely blocked the scraper. Try another URL or use a manually saved HTML sample."
+        if "404" in lowered or "not found" in lowered:
+            return "The page URL returned not found. Check the URL path."
+        if "timeout" in lowered or "timed out" in lowered:
+            return "The page took too long to respond. Try again or test a lighter page."
+        if "ssl" in lowered:
+            return "The site has an SSL/certificate issue from this environment."
+        return "The live page could not be fetched. Some websites block cloud or script-based requests."
+    return "The local file path was not found or could not be read. Use a repo-relative path such as inputs/sample_company_incorporation_page.html."
+
+
+def _diagnostic_row(page_context: dict, resolved_target: str, status: str, stage: str, error: Exception | None = None) -> dict:
+    error_message = str(error) if error else ""
+    return {
+        "url": page_context["url"],
+        "resolved_target": resolved_target,
+        "page_type": page_context["page_type"],
+        "target_topic": page_context["target_topic"],
+        "status": status,
+        "failed_stage": stage,
+        "error_type": type(error).__name__ if error else "",
+        "error_message": error_message,
+        "likely_blocker": _error_hint(error_message, resolved_target) if error else "",
+        "traceback": traceback.format_exc() if error else "",
+    }
+
+
+def _diagnostics_table(rows: list[dict]) -> pd.DataFrame:
+    columns = [
+        "status",
+        "url",
+        "resolved_target",
+        "failed_stage",
+        "error_type",
+        "error_message",
+        "likely_blocker",
+    ]
+    return pd.DataFrame([{column: row.get(column, "") for column in columns} for row in rows])
+
+
 st.set_page_config(page_title="AEO Audit MVP", layout="wide")
 st.title("AEO Retrieval Readiness Audit MVP")
 st.caption("Local internal testing interface. No login, database, dashboard, or paid API calls.")
@@ -190,12 +237,19 @@ if submitted:
         scoring_rubric = load_scoring_rubric(PROJECT_ROOT / "config" / "aeo_scoring_rubric.json")
         audit_results = []
         audited_contexts = []
-        skipped_pages = []
+        diagnostics = []
 
         progress = st.progress(0)
         for index, page_context in enumerate(page_contexts, start=1):
+            scrape_target = _resolve_audit_target(page_context["url"])
             try:
-                scraped_page = scrape_page(_resolve_audit_target(page_context["url"]))
+                scraped_page = scrape_page(scrape_target)
+            except Exception as error:
+                diagnostics.append(_diagnostic_row(page_context, scrape_target, "failed", "scrape_page", error))
+                progress.progress(index / len(page_contexts))
+                continue
+
+            try:
                 scraped_page["url"] = page_context["url"]
                 audit_results.append(
                     audit_page(
@@ -208,12 +262,21 @@ if submitted:
                     )
                 )
                 audited_contexts.append(page_context)
+                diagnostics.append(_diagnostic_row(page_context, scrape_target, "success", "", None))
             except Exception as error:
-                skipped_pages.append(f"{page_context['url']}: {error}")
+                diagnostics.append(_diagnostic_row(page_context, scrape_target, "failed", "audit_page", error))
             progress.progress(index / len(page_contexts))
 
         if not audit_results:
             st.error("No pages were successfully audited.")
+            st.subheader("Per-page error diagnostics")
+            st.dataframe(_diagnostics_table(diagnostics), use_container_width=True, hide_index=True)
+            with st.expander("Full technical tracebacks"):
+                for row in diagnostics:
+                    st.write(f"### {row['url']}")
+                    st.write(f"Failed stage: {row['failed_stage']}")
+                    st.write(f"Likely blocker: {row['likely_blocker']}")
+                    st.code(row["traceback"] or row["error_message"])
             st.stop()
 
         output_paths = export_site_audit_results(
@@ -232,10 +295,16 @@ if submitted:
     metric_col1.metric("Average AEO score", f"{average_score}/100")
     metric_col2.metric("Pages audited", len(audit_results))
 
-    if skipped_pages:
-        st.warning("Some pages were skipped:")
-        for skipped in skipped_pages:
-            st.write(f"- {skipped}")
+    failed_diagnostics = [row for row in diagnostics if row["status"] == "failed"]
+    if failed_diagnostics:
+        st.warning("Some pages were skipped. See exact blockers below.")
+        st.dataframe(_diagnostics_table(failed_diagnostics), use_container_width=True, hide_index=True)
+        with st.expander("Full technical tracebacks for skipped pages"):
+            for row in failed_diagnostics:
+                st.write(f"### {row['url']}")
+                st.write(f"Failed stage: {row['failed_stage']}")
+                st.write(f"Likely blocker: {row['likely_blocker']}")
+                st.code(row["traceback"] or row["error_message"])
 
     st.subheader("Page scores")
     st.dataframe(_page_summary_table(audit_results), use_container_width=True, hide_index=True)
