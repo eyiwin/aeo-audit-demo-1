@@ -221,47 +221,109 @@ with st.form("audit_form"):
     st.subheader("Client details")
     col1, col2 = st.columns(2)
     with col1:
-        client_name = st.text_input("Client name", "Harbour & Co Advisory")
-        brand_name = st.text_input("Brand name", "Harbour Incorporation")
-        website_url = st.text_input("Website URL", "https://www.harbourincorporation.example")
-        target_market = st.text_input("Target market", "Singapore")
+        client_name = st.text_input("Client name", "HubSpot")
+        brand_name = st.text_input("Brand name", "HubSpot")
+        website_url = st.text_input("Website URL", "https://www.hubspot.com")
+        target_market = st.text_input("Target market", "Global")
         target_audience = st.text_area(
             "Target audience",
-            "Foreign founders, startup operators, and small business owners who want to register a company in Singapore",
+            "Marketing managers, sales teams, B2B founders, demand generation teams, and business owners looking to generate and convert qualified leads.",
         )
     with col2:
         business_goal = st.text_area(
             "Business goal",
-            "Increase qualified consultation requests from founders researching Singapore company incorporation requirements.",
+            "Attract marketers and business owners searching for lead generation education, then guide them toward HubSpot's CRM, marketing automation, lead capture, and sales enablement products.",
         )
-        primary_conversion = st.text_input("Primary conversion", "Book a company incorporation consultation")
-        main_service = st.text_input("Main service", "Company incorporation services in Singapore")
-        primary_topic = st.text_input("Primary topic", "company incorporation services in Singapore")
+        primary_conversion = st.text_input(
+            "Primary conversion",
+            "Download a lead generation resource, sign up for HubSpot tools, or start using HubSpot CRM.",
+        )
+        main_service = st.text_input("Main service", "CRM, marketing automation, sales software, and lead generation tools")
+        primary_topic = st.text_input("Primary topic", "lead generation")
 
     secondary_topics_text = st.text_area(
         "Secondary topics, one per line",
-        "Singapore company registration\nACRA registration\nnominee director service\ncorporate secretary service",
+        "inbound marketing\n"
+        "lead capture\n"
+        "lead nurturing\n"
+        "landing pages\n"
+        "forms\n"
+        "calls-to-action\n"
+        "marketing automation\n"
+        "CRM\n"
+        "sales pipeline\n"
+        "lead qualification",
     )
-    competitors_text = st.text_area("Competitors, one per line", "Osome Singapore\nSleek Singapore\n3E Accounting")
+    competitors_text = st.text_area(
+        "Competitors, one per line",
+        "Salesforce\n"
+        "Marketo\n"
+        "ActiveCampaign\n"
+        "Pipedrive\n"
+        "Zoho CRM\n"
+        "Mailchimp",
+    )
 
     st.subheader("Batch audit inputs")
     st.caption("Enter one page per line. Format: URL or path | page type | target topic | priority")
     pages_text = st.text_area(
         "Pages to audit",
-        "inputs/sample_company_incorporation_page.html | service_page | company incorporation services in Singapore | high\n"
-        "inputs/sample_registration_guide.html | guide | Singapore company registration requirements | high\n"
-        "inputs/sample_nominee_director_page.html | service_page | nominee director service in Singapore | medium\n"
-        "inputs/sample_corporate_secretary_page.html | service_page | corporate secretary service in Singapore | medium",
+        "https://blog.hubspot.com/marketing/beginner-inbound-lead-generation-guide-ht | blog | lead generation | high\n"
+        "https://blog.hubspot.com/marketing/lead-generation-strategy | blog | lead generation strategy | high\n"
+        "https://blog.hubspot.com/marketing/optimize-website-for-lead-generation | blog | lead generation website | high\n"
+        "https://blog.hubspot.com/marketing/lead-gen-content-ideas | blog | lead generation content ideas | medium\n"
+        "https://blog.hubspot.com/marketing/facebook-lead-generation-tips-ht | blog | Facebook lead generation | medium\n"
+        "https://blog.hubspot.com/marketing/content-marketing-strategy-guide | blog | content marketing strategy | high\n"
+        "https://blog.hubspot.com/marketing/content-marketing | blog | content marketing | high\n"
+        "https://blog.hubspot.com/marketing/content-marketing-plan | blog | content marketing plan | high\n"
+        "https://blog.hubspot.com/marketing/content-creation | blog | content creation | medium\n"
+        "https://blog.hubspot.com/marketing/content-for-every-funnel-stage | blog | content marketing funnel | medium\n"
+        "https://blog.hubspot.com/sales/prospecting | blog | sales prospecting | high\n"
+        "https://blog.hubspot.com/sales/targeted-sales-prospecting-guide | blog | targeted sales prospecting | high\n"
+        "https://blog.hubspot.com/sales/effective-sales-prospecting-techniques-you-should-be-using | blog | sales prospecting techniques | medium\n"
+        "https://blog.hubspot.com/sales/the-5-most-common-objections-during-prospecting-and-how-to-overcome-them | blog | sales objections | medium\n"
+        "https://blog.hubspot.com/sales/phone-prospecting-tips-infographic | blog | phone prospecting | medium\n"
+        "https://blog.hubspot.com/service/customer-service | blog | customer service | high\n"
+        "https://blog.hubspot.com/service/customer-service-tips | blog | customer service tips | medium\n"
+        "https://blog.hubspot.com/service/customer-service-standards | blog | customer service standards | medium\n"
+        "https://blog.hubspot.com/service/importance-customer-service | blog | importance of customer service | medium\n"
+        "https://blog.hubspot.com/service | blog_index | customer service blog index | low",
         height=150,
     )
     target_questions_text = st.text_area(
         "Target questions, one per line",
-        "How do I incorporate a company in Singapore?\nCan a foreigner start a company in Singapore?\nWhat documents are needed for Singapore company incorporation?\nHow long does Singapore company registration take?",
+        "What is lead generation?\n"
+        "Why is lead generation important?\n"
+        "How does lead generation work?\n"
+        "What are the main stages of lead generation?\n"
+        "What are examples of lead generation strategies?\n"
+        "How can businesses generate leads online?\n"
+        "What is the difference between a visitor, lead, and customer?\n"
+        "How do landing pages help with lead generation?\n"
+        "How do forms and CTAs support lead generation?\n"
+        "How can CRM software help manage leads?",
         height=140,
     )
     required_entities_text = st.text_area(
         "Required entities, one per line",
-        "Harbour Incorporation\nSingapore\nACRA\nprivate limited company\nlocal resident director\ncorporate secretary\nregistered office address",
+        "HubSpot\n"
+        "lead generation\n"
+        "inbound marketing\n"
+        "CRM\n"
+        "marketing automation\n"
+        "sales pipeline\n"
+        "lead capture\n"
+        "landing page\n"
+        "form\n"
+        "call-to-action\n"
+        "CTA\n"
+        "lead nurturing\n"
+        "qualified lead\n"
+        "prospect\n"
+        "customer\n"
+        "conversion\n"
+        "email marketing\n"
+        "content marketing",
         height=140,
     )
 
