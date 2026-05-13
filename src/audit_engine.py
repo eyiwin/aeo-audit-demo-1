@@ -88,18 +88,46 @@ def _target_questions_for_page(target_questions: list[dict], page_context: dict)
     return matched or target_questions
 
 
+def _confidence(score_raw: int, found: list[str], missing: list[str]) -> str:
+    evidence_count = len(found) + len(missing)
+    if score_raw in {0, 10} or evidence_count >= 3:
+        return "high"
+    if evidence_count >= 2:
+        return "medium"
+    return "low"
+
+
+def _why_score(score_raw: int, found: list[str], missing: list[str]) -> str:
+    found_text = " ".join(found) if found else "No strong deterministic evidence was found."
+    missing_text = " ".join(missing) if missing else "No major deterministic gap was detected."
+    return f"Score {score_raw}/10 was assigned because: {found_text} Gaps considered: {missing_text}"
+
+
+def _improvement_path(score_raw: int, missing: list[str], fix: str) -> str:
+    if score_raw >= 9:
+        return f"To maintain or slightly improve this score, keep the current signals clear and complete. {fix}"
+    missing_text = " ".join(missing) if missing else "Add stronger deterministic evidence for this signal."
+    return f"Improve this score by addressing these gaps: {missing_text} {fix}"
+
+
 def _result(dimension: dict, score_raw: int, found: list[str], missing: list[str], fix: str) -> dict:
     weight = float(dimension["weight"])
+    evidence_found = found or ["No strong deterministic evidence found."]
+    evidence_missing = missing or ["No major deterministic gap detected."]
+    recommended_fix = fix or dimension["recommended_fix_logic"]
     return {
         "dimension_id": dimension["id"],
         "dimension_name": dimension["name"],
         "score_raw": score_raw,
         "weighted_score": round(score_raw / 10 * weight, 2),
         "weight": weight,
-        "evidence_found": found or ["No strong deterministic evidence found."],
-        "evidence_missing": missing or ["No major deterministic gap detected."],
+        "evidence_found": evidence_found,
+        "evidence_missing": evidence_missing,
+        "why_this_score": _why_score(score_raw, evidence_found, evidence_missing),
+        "what_would_improve_the_score": _improvement_path(score_raw, evidence_missing, recommended_fix),
+        "confidence_level": _confidence(score_raw, evidence_found, evidence_missing),
         "aeo_impact": dimension["description"],
-        "recommended_fix": fix or dimension["recommended_fix_logic"],
+        "recommended_fix": recommended_fix,
     }
 
 
