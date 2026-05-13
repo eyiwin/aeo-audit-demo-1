@@ -156,6 +156,63 @@ def _diagnostics_table(rows: list[dict]) -> pd.DataFrame:
     return pd.DataFrame([{column: row.get(column, "") for column in columns} for row in rows])
 
 
+def _render_results(state: dict) -> None:
+    audit_results = state["audit_results"]
+    diagnostics = state["diagnostics"]
+    output_paths = {key: Path(value) if isinstance(value, str) else value for key, value in state["output_paths"].items()}
+
+    st.subheader("Site-level results")
+    average_score = round(sum(result["overall_score"] for result in audit_results) / len(audit_results), 2)
+    metric_col1, metric_col2 = st.columns(2)
+    metric_col1.metric("Average AEO score", f"{average_score}/100")
+    metric_col2.metric("Pages audited", len(audit_results))
+
+    failed_diagnostics = [row for row in diagnostics if row["status"] == "failed"]
+    if failed_diagnostics:
+        st.warning("Some pages were skipped. See exact blockers below.")
+        st.dataframe(_diagnostics_table(failed_diagnostics), use_container_width=True, hide_index=True)
+        with st.expander("Full technical tracebacks for skipped pages"):
+            for row in failed_diagnostics:
+                st.write(f"### {row['url']}")
+                st.write(f"Failed stage: {row['failed_stage']}")
+                st.write(f"Likely blocker: {row['likely_blocker']}")
+                st.code(row["traceback"] or row["error_message"])
+
+    st.subheader("Page scores")
+    st.dataframe(_page_summary_table(audit_results), use_container_width=True, hide_index=True)
+
+    st.subheader("Dimension breakdown")
+    st.dataframe(_dimension_table(audit_results), use_container_width=True, hide_index=True)
+
+    st.subheader("Best-performing pages")
+    for result in sorted(audit_results, key=lambda item: item["overall_score"], reverse=True)[:3]:
+        st.write(f"- {result['page_title'] or result['url']}: {result['overall_score']}/100")
+
+    st.subheader("Weakest pages")
+    for result in sorted(audit_results, key=lambda item: item["overall_score"])[:3]:
+        st.write(f"- {result['page_title'] or result['url']}: {result['overall_score']}/100")
+
+    st.subheader("Site summary preview")
+    site_summary_text = output_paths["site_summary"].read_text(encoding="utf-8")
+    st.text_area("site_summary.md preview", site_summary_text[:4000], height=280)
+
+    st.subheader("Downloads")
+    download_cols = st.columns(3)
+    with download_cols[0]:
+        _download_button("site_summary.md", output_paths["site_summary"], "text/markdown")
+    with download_cols[1]:
+        _download_button("all_scores.csv", output_paths["all_scores"], "text/csv")
+    with download_cols[2]:
+        _download_button("all_findings.json", output_paths["all_findings"], "application/json")
+
+    st.subheader("Individual page reports")
+    for path in output_paths["page_reports"]:
+        _download_button(path.name, path, "text/markdown")
+
+    with st.expander("Raw all findings"):
+        st.json(json.loads(output_paths["all_findings"].read_text(encoding="utf-8")))
+
+
 st.set_page_config(page_title="AEO Audit MVP", layout="wide")
 st.title("AEO Retrieval Readiness Audit MVP")
 st.caption("Local internal testing interface. No login, database, dashboard, or paid API calls.")
@@ -285,57 +342,14 @@ if submitted:
             page_contexts=audited_contexts,
             output_dir=PROJECT_ROOT / "outputs",
         )
+        st.session_state["last_audit_state"] = {
+            "audit_results": audit_results,
+            "diagnostics": diagnostics,
+            "output_paths": output_paths,
+        }
     except Exception as error:
         st.error(f"Audit failed: {error}")
         st.stop()
 
-    st.subheader("Site-level results")
-    average_score = round(sum(result["overall_score"] for result in audit_results) / len(audit_results), 2)
-    metric_col1, metric_col2 = st.columns(2)
-    metric_col1.metric("Average AEO score", f"{average_score}/100")
-    metric_col2.metric("Pages audited", len(audit_results))
-
-    failed_diagnostics = [row for row in diagnostics if row["status"] == "failed"]
-    if failed_diagnostics:
-        st.warning("Some pages were skipped. See exact blockers below.")
-        st.dataframe(_diagnostics_table(failed_diagnostics), use_container_width=True, hide_index=True)
-        with st.expander("Full technical tracebacks for skipped pages"):
-            for row in failed_diagnostics:
-                st.write(f"### {row['url']}")
-                st.write(f"Failed stage: {row['failed_stage']}")
-                st.write(f"Likely blocker: {row['likely_blocker']}")
-                st.code(row["traceback"] or row["error_message"])
-
-    st.subheader("Page scores")
-    st.dataframe(_page_summary_table(audit_results), use_container_width=True, hide_index=True)
-
-    st.subheader("Dimension breakdown")
-    st.dataframe(_dimension_table(audit_results), use_container_width=True, hide_index=True)
-
-    st.subheader("Best-performing pages")
-    for result in sorted(audit_results, key=lambda item: item["overall_score"], reverse=True)[:3]:
-        st.write(f"- {result['page_title'] or result['url']}: {result['overall_score']}/100")
-
-    st.subheader("Weakest pages")
-    for result in sorted(audit_results, key=lambda item: item["overall_score"])[:3]:
-        st.write(f"- {result['page_title'] or result['url']}: {result['overall_score']}/100")
-
-    st.subheader("Site summary preview")
-    site_summary_text = output_paths["site_summary"].read_text(encoding="utf-8")
-    st.text_area("site_summary.md preview", site_summary_text[:4000], height=280)
-
-    st.subheader("Downloads")
-    download_cols = st.columns(3)
-    with download_cols[0]:
-        _download_button("site_summary.md", output_paths["site_summary"], "text/markdown")
-    with download_cols[1]:
-        _download_button("all_scores.csv", output_paths["all_scores"], "text/csv")
-    with download_cols[2]:
-        _download_button("all_findings.json", output_paths["all_findings"], "application/json")
-
-    st.subheader("Individual page reports")
-    for path in output_paths["page_reports"]:
-        _download_button(path.name, path, "text/markdown")
-
-    with st.expander("Raw all findings"):
-        st.json(json.loads(output_paths["all_findings"].read_text(encoding="utf-8")))
+if "last_audit_state" in st.session_state:
+    _render_results(st.session_state["last_audit_state"])
